@@ -5,8 +5,6 @@
 
 ## Lab Objectives
 
-By the end of this lab, you will:
-
 - Understand what Compliance Manager is and how it can help an organization manage compliance against risk and regulation
 - See Compliance Manager in action against a specific regulation (or set of regulations)
 - Explore options for assigning specific findings to a technical resource for remediation
