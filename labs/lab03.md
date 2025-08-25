@@ -33,6 +33,7 @@
 4. Open a built-in SIT and review:
    - **Patterns** (primary element + supporting elements)
    - **Confidence levels** (Low/Medium/High) and thresholds
+   - See <https://learn.microsoft.com/en-us/purview/sit-sensitive-information-type-learn-about#fundamental-parts-of-a-sensitive-information-type> for more information
 5. In a built-in SIT, click **Copy** (you can create a customizable copy). Cancel/discard the copy—next you’ll build your own from scratch.
 
 ## Key takeaways
@@ -123,8 +124,16 @@ I acknowledge receipt of the Contoso Employee Handbook and agree to follow appli
 2. **Name:** `Block New Hire Form external` → **Next**.  
 3. **Locations:** Enable **Exchange**, **SharePoint**, **OneDrive**, **Teams** (you can also extend to **Endpoints** later). → **Next**.  
 4. **Rules** → choose **Create or customize advanced DLP rules** → **Create rule**:
-- **Condition:** *Content contains* → **Sensitive info types** → add **Contoso New Hire Form (Fingerprint)** with **Medium** (or **High**) confidence.
-- **Actions:** **Block** external sharing/sending; enable **User override with justification** (optional).
+- **Condition:**
+   - *Content is shared from Microsoft 365* → **with people outside my organization**
+   - *Content contains* → **Sensitive info types** → add **Contoso New Hire Form (Fingerprint)** with **Medium** (or **High**) confidence.
+
+![Conditions](../images/lab03/rule-conditions.png)
+
+- **Actions:**
+
+![Actions](../images/lab03/rule-actions.png)
+
 - **User notifications:** **On** (policy tips + email).  
 - **Incident reports:** **On** (to admins/SECops).  
 - **Mode:** Start in **Test with notifications**; switch to **Enforce** after validation.
@@ -134,9 +143,9 @@ I acknowledge receipt of the Contoso Employee Handbook and agree to follow appli
 
 1. Create a filled-in copy of the template named **HR-NewHire-Filled.docx** (retain most of the template text).  
 2. Validate one or more of the following:
-- **Exchange:** Send the file to an **external** recipient (e.g., a personal mailbox). Expect a **policy tip** and a **block** or **override** prompt.  
-- **SharePoint/OneDrive:** Upload the file, then attempt to **Share** with an external email. Expect block/override flow.  
-- **Teams:** Paste substantial portions of the form text in a chat/channel. Expect a tip/block (depending on your action settings).
+- **Exchange:** Send the file to an **external** recipient (e.g., a personal mailbox). Expect a **policy tip**.  
+- **SharePoint/OneDrive:** Upload the file, then attempt to **Share** with an external email. Expect a **policy tip**.  
+- **Teams:** Paste substantial portions of the form text in a chat/channel. Expect a **policy tip**.
 
 ---
 
@@ -154,10 +163,18 @@ I acknowledge receipt of the Contoso Employee Handbook and agree to follow appli
 2. **Locations:** Select **Exchange**, **SharePoint**, **OneDrive**, **Teams** (Named Entities are supported here; not in on-prem sources).  
 3. **Rules** → **Create or customize advanced DLP rules** → **Create rule**:
 - **Condition:** *Content contains* → **Sensitive info types** → add:
-  - **All physical addresses** (bundled named-entity SIT)
-  - **Person name** (unbundled named-entity SIT)
+  - **All Physical Addresses** (bundled named-entity SIT)
+  - **All Full Names** (unbundled named-entity SIT)
+
+![Conditions](../images/lab03/entity-conditions.png)
+
 - Set **min instances** = 1 for each, **Confidence** = Medium.  
-- **Actions:** Notify + block external sharing; allow overrides for specific groups if desired.  
+- **Actions:**
+
+![Actions](../images/lab03/entity-actions.png)
+
+- **User notifications:** **On** (policy tips + email).  
+- **Incident reports:** **On** (to admins/SECops).  
 - **Mode:** Start in **Test with notifications**, then **Enforce**.
 4. **Publish**.
 
