@@ -96,42 +96,6 @@
 
 ---
 
-## Exercise 6 (Optional) — Endpoint DLP on devices (20–30 min)
-
-> Requires E5/E5 Compliance and onboarded devices.
-
-1. **Onboard devices**
-   - Review **Device onboarding** options (Windows/macOS via MDE or MDM). Onboard at least one test device you control.
-2. **Add Devices to your policy**
-   - Edit your DLP policy → **Locations** → enable **Devices**.
-3. **Configure endpoint actions** in the rule (examples):
-   - **Copy to USB** = Audit/Block, **Print** = Audit/Block, **Copy to clipboard** = Audit/Block, define **Unallowed apps/browsers** as needed.
-4. **Test on the device**
-   - Save the test document with the credit card number.
-   - Try to **copy to USB**, **print**, or **paste** into an unallowed app.
-   - You should see **endpoint policy tips/toasts** and events in **Activity explorer**.
-
----
-
-## Exercise 7 (Optional) — Adaptive Protection with DLP (15–25 min demo)
-
-> Adaptive Protection integrates **Insider Risk Management** risk levels with DLP/Conditional Access to dynamically tighten controls for riskier users.
-
-### A. Turn on Adaptive Protection (quick setup)
-
-1. Purview portal → **Insider risk management → Adaptive protection → Dashboard → Quick setup**  
-   or from **Purview Home / DLP Overview** select **Turn on Adaptive Protection**.
-2. Quick setup creates **DLP policies** (Teams/Exchange and Devices) with rules pre-scoped to **Elevated** and **Moderate/Minor** risk levels. Review what was created.
-
-### B. Manually build a DLP rule using risk level
-
-1. Create (or edit) a DLP policy → **Conditions** → add **Insider risk level for Adaptive Protection is** → choose **Elevated**, **Moderate**, or **Minor**.
-2. Add typical conditions (e.g., **Content shared externally**) and actions (e.g., **Block external access**, notify user, raise incidents).
-
-> **Note:** This is a **demo** step unless your tenant already produces risk levels; generating real “elevated risk” users requires Insider Risk policies/signals.
-
----
-
 ## SC-100 Tie-in — Strategy & architecture (5–10 min)
 
 - **Zero Trust pillars**  
@@ -166,8 +130,10 @@
 - A documented **policy intent** tied to real DLP components.
 - A working **DLP policy** in simulation and enforcement modes.
 - Hands-on experience with **policy tips**, **alerts**, and **Activity explorer**.
-- (Optional) Endpoint DLP working on a device.
-- (Optional) **Adaptive Protection** enabled and visible with DLP policies that use **risk levels**.
+
+---
+
+### Appendix — Fast test content you can paste
 
 ```Text
 Here’s the customer’s card for the hotel:
