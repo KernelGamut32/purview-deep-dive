@@ -36,7 +36,7 @@
 
 ### 1.1 Create “Public” (no protection)
 1. In Purview: **Solutions → Information protection → Sensitivity labels → Create label**
-2. **Name:** `Public`  
+2. **Name:** `Public - Test`  
    **Description for users:** `Intended for non-sensitive content.`
 3. **Scope:** Select **Files & emails** (or **Files & other data assets** + **Emails**, depending on your tenant wording)
 4. Leave **Access control (encryption)** and **Auto-labeling** off
@@ -44,11 +44,11 @@
 6. **Review and create** → **Create**
 
 ### 1.2 Create “Confidential” (visual markings only)
-1. **Create label** → **Name:** `Confidential`
+1. **Create label** → **Name:** `Confidential - Test`
 2. **Scope:** Files & emails
 3. **Access control (encryption):** Off
 4. **Content marking:** On  
-   - **Header:** `Confidential` (set font/size as desired)  
+   - **Header:** `Confidential - Test` (set font/size as desired)  
    - (Optional) **Footer** or **Watermark** with “Confidential”
 5. **Review and create** → **Create**
 
@@ -72,14 +72,13 @@
 > Newer tenants may list this as **Publishing policies** under Information protection.
 
 1. Go to **Solutions → Information protection → Publishing policies** (or **Label policies**) → **Publish label**
-2. **Select labels:** Add `Public`, `Confidential`, and `Highly Confidential – Finance (Encrypted)`
+2. **Select labels:** Add `Public - Test`, `Confidential - Test`, and `Highly Confidential – Finance (Encrypted)`
 3. **Choose users and groups:** Select your pilot group (e.g., `Label-Pilot`)  
    > Keep scope small for fast, observable results
 4. **Policy settings (Documents & Email)**
    - **Require users to apply a label:** **On** (mandatory labeling)
    - **Require justification to remove or lower a label:** **On**
-   - **Apply a default label to documents and emails:** **Confidential**
-   - **Provide help link to users:** (Optional) add your labeling guidance URL
+   - **Apply a default label to documents and emails:** **Confidential - Test**
 5. **Review and finish** → **Create**
 
 > **Propagation:** Allow time for labels/policies to appear across clients. Office on the web typically reflects changes sooner than desktop apps.
@@ -91,10 +90,10 @@
 1. Sign in to **Word for the web** (or desktop) with a user in the policy’s target group
 2. Create a document in **OneDrive** or a **SharePoint** library
 3. Use the **Sensitivity** menu to:
-   - Apply **Public** → Save → observe absence of markings
-   - Apply **Confidential** → Save → verify header/footer/watermark
+   - Apply **Public - Test** → Save → observe absence of markings
+   - Apply **Confidential - Test** → Save → verify header/footer/watermark
    - Apply **Highly Confidential – Finance (Encrypted)** → Save → sign out/in with a **non-Finance** user to confirm access is blocked
-4. Try to **downgrade** from **Highly Confidential** to **Confidential/Public** and capture the **justification** prompt (policy setting)
+4. Try to **downgrade** from **Highly Confidential – Finance (Encrypted)** to **Confidential/Public - Test** and capture the **justification** prompt (policy setting)
 
 ---
 
@@ -104,15 +103,15 @@
 
 ### 4.1 Create the policy
 1. In Purview: **Solutions → Information protection → Policies → Auto-labeling policies → Create auto-labeling policy**
-2. **Choose a label to auto-apply:** select `Confidential` (or create a dedicated sublabel if you prefer)
-3. **Choose info to match:** Select a built-in template (e.g., **Financial**) and include **U.S. Social Security Number**
+2. **Choose a label to auto-apply:** select `Confidential - Test` (or create a dedicated sublabel if you prefer)
+3. **Choose info to match:** Select a built-in template (e.g., **Privacy**) and include **U.S. Personally Identifiable Information (PII) Data Enhanced**
 4. **Locations:** Select **Exchange**, **SharePoint**, and **OneDrive** (or limit to specific sites/mailboxes for class)
 5. **Rules:** Keep **Common rules**; ensure SSN condition is enabled
 6. **Mode:** **Run policy in simulation mode**
 7. **Create**
 
 ### 4.2 Generate matches and review
-1. In a **SharePoint** site you scoped, upload a Word file containing sample data such as:  
+1. In **OneDrive**, create a Word document containing sample data such as:  
    `Employee: Jane Doe — SSN: 123-45-6789` *(use obviously fake values)*
 2. Back in **Auto-labeling policies**, open your policy and go to **Items to review**
 3. Confirm the uploaded file appears as a **match**; repeat with 1–2 more files to see multiple results
@@ -139,14 +138,6 @@
 1. **Data classification → Content explorer**
 2. Filter by **Sensitivity label** (e.g., `Confidential`)
 3. Drill down into **SharePoint** or **OneDrive**; if you have **Content Viewer** rights, preview redacted content where supported
-
----
-
-## Exercise 6 — (Optional) Advanced encryption scenarios
-
-- **Email-only policies:** In the encrypted label, enable **Do Not Forward** or **Encrypt-Only** for quick mail demos
-- **Broad sharing with controls:** “Any authenticated users” + restricted usage rights (view/edit, block print/copy) for partner scenarios
-- **Double Key Encryption (DKE):** Use when regulations require you to control one key independently of Microsoft (plan client support before demo)
 
 ---
 
