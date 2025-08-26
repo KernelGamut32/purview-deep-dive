@@ -1,8 +1,8 @@
 # Lab 05: Implementing Data Loss Prevention (DLP) in Microsoft Purview
 
-> **Goal:** Plan, build, test, and monitor a Microsoft Purview DLP policy for Microsoft 365 workloads (Exchange Online, SharePoint/OneDrive, Teams). Optionally enable Endpoint DLP and Adaptive Protection. Everything below reflects current Purview UI and capabilities.
+> **Goal:** Plan, build, test, and monitor a Microsoft Purview DLP policy for Microsoft 365 workloads (Exchange Online, SharePoint/OneDrive, Teams).
 
-**Estimated time:** 60–90 minutes (add ~30–45 min if you also do Endpoint DLP and Adaptive Protection)
+**Estimated time:** 45-60 minutes
 
 ---
 
@@ -13,24 +13,23 @@
 - **Roles**
   - You need one of: **Compliance Administrator**, **Compliance Data Administrator**, **Information Protection Admin**, or **Security Administrator** to create DLP policies.
 - **Portals & navigation**
-  - **Microsoft Purview portal** (https://compliance.microsoft.com) → **Data loss prevention** for policies and alerts.
+  - **Microsoft Purview portal** (<https://purview.microsoft.com>) → **Data loss prevention** for policies and alerts.
   - **Data classification → Activity explorer** for detailed activity views (also available from the DLP page).
 - **Audit (for alerts/activity)**
   - Ensure **Audit** is on: Purview portal → **Audit** → if prompted, select **Start recording user and admin activity** (may take up to 60 minutes to take effect).
 - **Test accounts/content**
   - One **sender** (your admin account is fine) and one **external address** (e.g., a personal Gmail) to test email sharing.
-  - Use the test creditcard number **4111 1111 1111 1111** to trigger the **Credit Card Number** sensitive information type (SIT).
+  - Use the test data provided in the **Appendix** below to trigger the DLP policy created in this lab.
 - **Optional**
   - For **Teams** file-sharing enforcement, remember Teams DLP acts on files via **SharePoint/OneDrive**—make sure those locations are included.
-  - For **Endpoint DLP**, Windows 10/11 or recent macOS devices must be **onboarded**; Microsoft Defender for Endpoint (MDE) or MDM onboarding is supported.
 
 ---
 
-## Exercise 1 — Plan your policy (5–10 min)
+## Exercise 1 — Plan your policy
 
 1. Draft a **policy intent statement** answering:
    - What data? (e.g., **Payment card data**)
-   - Where? (Exchange, SharePoint/OneDrive, Teams; optionally **Devices**)
+   - Where? (Exchange, SharePoint/OneDrive, Teams)
    - What behaviors to restrict? (external sharing, emailing outside, copying to USB, printing, etc.)
    - User experience? (show **policy tips** first, then **block with override**, then **block**)
 2. Map the intent to Purview DLP components: **Locations** (workloads), **Conditions** (Sensitive information types), **Actions** (block/override/audit), **User notifications**, and **Incident/alerting**.
@@ -39,42 +38,80 @@
 
 ---
 
-## Exercise 2 — Create a DLP policy (simulation mode) (10–15 min)
+## Exercise 2 — Review the Devices DLP Policy
 
-1. In the **Microsoft Purview** portal, go to **Data loss prevention → Policies → Create policy**.
-2. **Choose a template**: select **Financial → U.S. Financial Data** (or **Custom policy** if you prefer to build from scratch). Templates include **Credit Card Number** and other common SITs.
-3. **Name & describe** the policy (e.g., “DLP – Payment Cards (Pilot)”).
-4. **Choose locations**: **Exchange email**, **SharePoint sites**, **OneDrive accounts**, **Microsoft Teams chat and channel messages**. (Leave **Devices** unchecked for now; you’ll add it in the endpoint exercise.)
-5. **Configure rules** (edit the default rule if using a template):
-   - **Condition:** *Content contains* → **Sensitive info types** → **Credit Card Number** → **min count = 1**.
-   - **Action (simulation):** No blocking yet.
-   - **User notifications:** **On** → show **policy tips** and send email notification to the user who triggered the match.
-   - **Incident reports (alerts):** **On** → **Severity = Medium**, **Send alert every time an activity matches**, **Recipients = you**.
-6. **Mode**: choose **Test it out first (simulation)** with notifications. Finish and **Create**.
+1. In the **Microsoft Purview** portal, go to **Data loss prevention → Policies**.
+2. Review the pre-existing set of policies in the sandbox environment (e.g., **Default policy for Teams** or **Default policy for devices**)
+3. Check **Default policy for devices** and click the pencil icon (for edit)
+4. Click **Next** on the "Name your DLP policy" page, leaving defaults
+5. Click **Next** on the "Assign admin units" page, leaving defaults
+6. On the "Choose where to apply the policy" page, note that only **Devices** is selected; click **Next**
+7. On the "Customize advanced DLP rules" page, click the pencil icon next to one of the pre-defined rules
+8. Review the rule definition, especially noting settings under the "Audit or restrict activities on devices" action
+9. Take note of the types of actions you can manage relative to DLP with devices
+10. Click **Cancel** and click **Cancel**
 
 ---
 
-## Exercise 3 — Generate matches & see the end-user experience (10–15 min)
+## Exercise 3 — Create a DLP policy (simulation mode)
+
+1. In the **Microsoft Purview** portal, go to **Data loss prevention → Policies → Create policy**.
+2. Click the plus sign (or "Create policy") to create a new policy from the DLP "Policies" page
+3. On the "Choose what type of data to protect" page, leave the default of "Data stored in connected sources" selected and click **Next**
+4. On the "Start with a template or create a custom policy" page, choose "Medical and health" under **Categories**, select "U.S. Health Insurance Act (HIPAA) Enhanced" under **Regulations**, and click **Next**
+5. On the "Name your DLP policy" page, assign a name of your choosing (e.g., ```US HIPAA Policy```) and, optionally, modify the description; click **Next**
+6. On the "Assign admin units" page, leave the default of "Full directory" under "Admin units" and click **Next**
+7. On the "Choose where to apply the policy" page, **uncheck** everything **except for** "Exchange email", "SharePoint sites", "OneDrive accounts", and "Teams chat and channel messages"
+
+![Policy Locations](../images/lab05/policy-locations.png)
+
+8. Explore the "Edit" options next to each location to see what kinds of configuration you can assign for each location; however, don't make any changes (use **Cancel** to exit from the edit actions dialog)
+9. Click **Next**
+10. On the "Define policy settings" page, leave "Review and customize default settings from the template" selected and click **Next**
+11. On the "Info to protect" page, leave "Detect when this content is shared from Microsoft 365" checked and verify that "With people outisde my organization" is selected; click **Next**
+12. On the "Protection actions" page, use the following settings:
+
+![Protection Actions](../images/lab05/protection-actions.png)
+
+13. Click **Next**
+14. On the "Customize access and override settings" page, leave all settings at their defaults and click **Next**
+15. On the "Policy mode" page, leave "Run the policy in simulation mode" selected and check "Show policy tips while in simulation mode"
+
+![Policy Mode](../images/lab05/policy-mode.png)
+
+16. Click **Next**
+17. On the "Review and finish" page, click **Submit**
+18. Click **Done**
+
+---
+
+## Exercise 4 — Generate matches & see the end-user experience
 
 ### A. Outlook on the web (policy tips)
 
-1. Open **Outlook on the web (OWA)** as the **sender**.
-2. Compose a new email **to an external address**. Subject: “Expense receipts”. Body: include the test number `4111 1111 1111 1111`.
-3. **Observe** the **DLP policy tip** banner in OWA warning about sensitive info.  
-   - **Note:** Policy Tips support varies by client; for this lab use **Outlook on the web** to ensure you see them.
-4. **Send** the message (in simulation it will send). You should also receive the **notification email** you configured.
+1. Open **Outlook on the web (OWA)** as the **sender** - you can use the admin account used to login to Purview
+2. To navigate there, click the "9 Dots" in the upper-left in Purview and click "Outlook"
+
+![Open OWA](../images/lab05/open-owa.png)
+
+3. If prompted to login, use the admin credentials provided with the sandbox
+4. Use an external email address (an address outside of the sandbox tenant) for the **To**
+5. For subject, use "Latest Doctor's Visit"
+6. In the body of the email, apply text similar to what you find in the **Appendix** below
+7. Depending on the performance of the sandbox and sync status for the policy, you may see policy tips
+8. If not, if you send the email, you should receive a notification about the policy violation
 
 ### B. OneDrive/SharePoint & Teams (file sharing)
 
-1. In **OneDrive**, create a **Word document** “CustomerAccounts.docx” with the same test number inside.
-2. Attempt to **share externally** (e.g., “Anyone with the link” or a specific external user).  
+1. In **OneDrive**, create a **Word document** “JaneDoe.docx” with the same test data from the **Appendix** below.
+2. To navigate there, click the "9 Dots" in the upper-left in Purview and click "OneDrive"
+3. Attempt to **share externally** (e.g., “Anyone with the link” or a specific external user).  
    - In **Teams**, share or attach the same file in a chat/channel.  
    - **Note:** Teams file protection relies on SharePoint/OneDrive being included in the policy.
-3. In simulation mode, you’ll see **policy tips** (where supported) and the share may still complete.
 
 ---
 
-## Exercise 4 — Review alerts & activity (10–15 min)
+## Exercise 5 — Review alerts & activity
 
 > There can be a short delay before events appear. If you don’t see anything, wait a few minutes and refresh.
 
@@ -83,16 +120,33 @@
 2. **Activity explorer:**  
    - Purview portal → **Data loss prevention → Activity explorer** (or **Data classification → Activity explorer**).  
    - Filter by **Location**, **Policy/Rule**, **Action**, and **User** to see your test activities for the last 30 days.
+3. **Data explorer:**
+    - In Purview, navigate to **Settings** -> **Roles and scopes** -> **Role groups**
+    - Search for "Content"
+    - Add your admin account to **Content Explorer Content Viewer** and **Content Explorer List Viewer**
+    - Log out and back in to Purview
+    - Navigate to **Solutions** -> **Data Loss Prevention** -> **Explorers** -> **Data explorer**
+    - Explore drilldown into flagged content
 
 ---
 
-## Exercise 5 — Move to enforcement & retest (10–15 min)
+## Exercise 6 — Move to enforcement & retest
 
-1. Edit your policy rule: **Actions** → choose **Block with override** for low match count (e.g., ≥1) and **Block** for higher threshold (e.g., ≥5). Save. (Exact thresholds are up to you.)
-2. Change **Mode** to **Turn it on right away** (enforced).
-3. **Retest OWA** and **OneDrive/Teams**:
-   - You should now be **blocked** or **asked to justify** (override) depending on thresholds.
-   - Verify **new alerts** are generated and review in **Activity explorer**.
+1. Navigate to **Solutions** -> **Data Loss Prevention** -> **Policies**
+2. Check "US HIPAA Policy" and click the pencil icon (to edit)
+3. Click **Next** x 3
+4. On the "Customize advanced DLP rules" page, click the pencil icon next to the defined rule
+5. Under **Actions**, click **Add an action** and click "Restrict access of encrypt content in Microsoft 365 locations"
+6. Use the following settings:
+
+![Actions](../images/lab05/enforcement-actions.png)
+
+7. Click **Save**
+8. Click **Next**
+9. On the "Policy mode" page, select "Turn the policy on immediately" and click **Next**
+10. Click **Submit** and click **Done**
+11. Attempt the same actions attempted in **Exercise 4**
+12. Also, review the activity using the steps outlined in **Exercise 5**
 
 ---
 
@@ -136,6 +190,8 @@
 ### Appendix — Fast test content you can paste
 
 ```Text
-Here’s the customer’s card for the hotel:
-4111 1111 1111 1111
+Patient: Jane Doe
+Address: 123 Any Street, Springfield, IL 62704
+Diagnosis: Type 2 diabetes mellitus without complications (ICD-10-CM E11.9)
+Plan: Follow-up in 3 months
 ```
