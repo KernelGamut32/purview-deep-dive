@@ -1,0 +1,25 @@
+# Lab 07 - Creating an eDiscovery Case in Microsoft Purview
+
+- Login to <https://purview.microsoft.com>
+- In the left-hand menu, select Solutions | eDiscovery
+- If not taken there automatically, select Cases and click "Create case"
+- Assign a name to your case (e.g., "IP Leakage - Sensitive Project")
+- Optionally apply a description (e.g., "Execute and process scans for leakage of intellectual property data associated to Project Delphi")
+- Click "Create"
+- After the case has been created, click "Cases" in the top-level breadcrumb to return to the "Cases" dashboard
+- Review the dashboard including the various attributes associated to each case
+- Notice the "Delete case" and "Close case" option for each case
+- Click the case to drill down into case details
+- Click "Case settings" to review (and adjust if required) the case's configuration
+- Close the settings and click "Create a search"
+- Assign a name to the search (e.g., "IP Leakage Review")
+- Optionally apply a description (e.g., "Review communications and documents related to a suspected leakage of confidential intellectual property detail on Project Delphi")
+- Click "Create"
+- Click "Add sources" to add specific sources to the search
+- Select 2 - 3 test users for inclusion; use "Manage" to define the data sources that will be searched as part of the case
+- Try sending some emails and Teams messages - explore results in Statistics and Sample views
+- Explore adding a query to fine tune the search results to focus on a specific time period, keywords, or use the KQL query language to define the filter
+- Update statistics and samples views to see what was uncovered with the latest configuration
+- Try sending some emails to different people and Teams messages to different people (some that match and some that do not)
+- Regenerate views for statistics and sample data and review
+- Export the search results and review the resulting artifact(s)

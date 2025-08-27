@@ -1,0 +1,101 @@
+# Lab 08 - Applying and Testing Hold Policies in an eDiscovery Case
+
+- Login to <https://purview.microsoft.com>
+- In the left-hand menu, select Solutions | eDiscovery
+- If not taken there automatically, select Cases and click "Create case"
+- Assign a name to your case (e.g., "Insider Trading Investigation")
+- Optionally apply a description (e.g., "Execute and process scans for information that could indicate illegal insider trading activity")
+- Click "Create"
+- After the case has been created, click "Cases" in the top-level breadcrumb to return to the "Cases" dashboard
+- Review the dashboard including the various attributes associated to each case
+- Notice the "Delete case" and "Close case" option for each case
+- Click the case to drill down into case details
+- Click "Case settings" to review (and adjust if required) the case's configuration
+- Close the settings and navigate to the "Data sources" tab and add 2 - 3 individuals
+- From the "Searches" tab, create a new search - assign a name (e.g., "Evidence Retrieval") and optionally a description (e.g., "Search for any evidence indicative of insider trading at the company")
+- Click "Add sources" to add specific sources to the search
+- For "Scope items by", click "All sources in this case" and select the 2 or 3 users previously added to the case
+- Alternatively, you can add additional sources by setting "Scope items by" to "All sources in the tenant (default)"; try adding a group
+- Click "Manage" to define the data sources that will be searched as part of the case
+- Try sending some emails and Teams messages
+- Add a Word document to one of the user's OneDrive locations
+- Add an Excel spreadsheet to one of the other user's OneDrive locations
+- Explore results in Statistics and Sample views (generate or regenerate the views as required)
+- Explore adding a query to fine tune the search results to focus on a specific time period, keywords, or use the KQL query language to define the filter
+- Add more documents to the OneDrive locations (some that match and some that do not)
+- Update statistics and samples views to see what was uncovered with the latest configuration
+- Try sending some emails to different people and Teams messages to different people (some that match and some that do not)
+- Regenerate views for statistics and sample data and review
+- Apply a hold to 2 of the 3 users
+- Apply a hold to the group using a query to filter what gets held
+- Verify that the hold is on and review each hold item for details
+- Testing Preservation (Goal: Attempt deletions and show that held items cannot be permanently removed)
+  - Email Deletion Test
+    - Delete an email previously retrieved in a search, then empty their Deleted Items folder
+    - Back in Purview, rerun a Search scoped to that mailbox and looking for a specific keyword
+    - Result: The deleted email still appears in search results—shows that hold preserved it
+  - OneDrive File Deletion Test
+    - Delete a file from OneDrive and then remove it from the Recycle Bin
+    - In Purview, run a search scoped to that OneDrive location
+    - Result: The file still surfaces—hold has preserved a copy
+  - Teams Chat Deletion Test
+    - In a Teams client, delete a chat message in scope of the hold
+    - Because chat messages are stored in the user’s mailbox, rerun your mailbox search
+    - Result: The deleted chat message is still returned
+- Inspecting Versioning and Recovery
+    -OneDrive Version History
+        - In the user’s OneDrive UI, select the held file → Version history
+        - Show that prior versions (or a “deleted” version) can be restored even though the user emptied their Recycle Bin
+  - Recovering Email via eDiscovery
+    - In your case Searches, click Export results for the mailbox search: choose All items, format PST, then Export
+    - Open the exported PST in Outlook and demonstrate recovery of the “deleted” email.
+- Removing and Testing Hold Release
+  - Temporarily Disable the Hold
+    - Go back to Holds, select the hold, and toggle Status to Off
+    - Wait for processing to complete (may take a few minutes)
+  - Re-test Deletion
+    - Delete another related item
+    - Rerun your Purview search—this time, the item should not be returned, confirming the hold is no longer preserving new deletions
+- Create a Review Set
+  - In your case, go to the Review sets tab and click + New review set
+  - Enter a name and optional description
+  - Click Create
+  - The new Review set appears in the list with Status: Ready
+- Add Search Results to the Review Set
+  - Switch to the Searches tab, select your search
+  - In the flyout, click Add results to review set
+  - Choose Add to existing review set, and select the review set by name
+  - Under What to add, keep “Indexed items that match your search query”
+  - Click Add. Monitor the ingestion on the Jobs tab—when complete, your Review set is populated.
+- Run Analytics: Duplicate Detection & Themes
+  - Open the review set
+  - From the toolbar, select Analytics > Run document & email analytics
+  - In the pane, ensure Near duplicate detection, Email threading, and Themes are checked
+  - Click Run
+  - Wait for the job to complete (check Jobs tab)
+- Exploring Duplicate Detection
+  - In the Review set, click Analytics > Duplicate detection
+  - View groups of near-identical documents (e.g. multiple copies of the same email or file)
+  - Action Example:
+    - Bulk-tag one representative per duplicate group as “Verified Unique”
+    - Exclude duplicates from review by saving a filter query: DuplicateGroupId:empty (keeps only unique items)
+- Exploring Themes (Topic Matching)
+  - In the Review set, click Analytics > Themes
+  - You’ll see automatically generated “themes” (clusters of related terms)
+  - Action Example:
+    - Filter on high-priority themes (e.g. Theme:“Confidential”) to focus on sensitive documents first
+    - Create a Saved Filter named ConfidentialTheme and apply it to quickly re-filter the set
+- Additional Review Set Actions
+  - Email Threading: Group conversations so reviewers see full context.
+    - Action: Collapse threads, then bulk-tag entire threads as “Reviewed” once any item in the thread has been coded
+  - Tagging & Coding:
+    - Create custom tags (e.g., Privilege, Responsive, Non-Responsive)
+    - Apply tags to single or multiple items, then export tag reports
+  - Saved Queries:
+    - Save common filters (e.g. file type, date range, custodian) as reusable filter queries
+  - Export:
+    - Export only items tagged “Responsive” for production, with deduplication turned on to avoid redundant copies
+- Discussion Points
+  - Hold Scope: A single hold on mailboxes covers both email and Teams chats
+  - Data Retention vs. Hold: Holds preserve items even if retention policies allow deletion
+  - Performance Considerations: Large holds can impact indexing time; discuss strategies like scoped queries
