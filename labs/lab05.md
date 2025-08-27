@@ -28,7 +28,7 @@
 ## Exercise 1 — Plan your policy
 
 1. Draft a **policy intent statement** answering:
-   - What data? (e.g., **Payment card data**)
+   - What data? (e.g., **Medical data**)
    - Where? (Exchange, SharePoint/OneDrive, Teams)
    - What behaviors to restrict? (external sharing, emailing outside, copying to USB, printing, etc.)
    - User experience? (show **policy tips** first, then **block with override**, then **block**)
